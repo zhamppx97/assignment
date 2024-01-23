@@ -1,0 +1,108 @@
+<p-toast></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4><b>ค้นหาเจ้าของ</b></h4>
+            <hr class="line-green">
+
+            <p-table #dt [value]="users" [loading]="loading" [paginator]="true" [rows]="20"
+                [showCurrentPageReport]="true" styleClass="p-datatable-striped p-datatable-sm"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+                [rowsPerPageOptions]="[20,50,100]" selectionMode="multiple" [rowHover]="true" dataKey="userId">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th scope="col">Operation</th>
+                        <th scope="col">HN เจ้าของ</th>
+                        <th scope="col">ชื่อเจ้าของ</th>
+                        <th scope="col">เบอร์ติดต่อ</th>
+                        <th scope="col">อีเมล์</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-user>
+                    <tr>
+                        <td>
+                            <button pButton pRipple icon="pi pi-file-edit" class="p-button-raised p-button-secondary"
+                                (click)="editUser(user)"></button>
+                        </td>
+                        <td>{{user.hn}}</td>
+                        <td>
+                            <a (click)="editUser(user)" style="cursor: pointer;">{{user.firstName}}
+                                {{user.lastName}}</a>
+                        </td>
+                        <td>{{user.phoneNo}}</td>
+                        <td>{{user.email}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-dialog [(visible)]="userDetailsDialog" [style]="{width: '95%', height: '60%'}" header="เจ้าของ"
+                [modal]="true" class="p-fluid">
+                <ng-template pTemplate="content">
+                    <hr class="line-green">
+
+                    <div class="col-12">
+                        <div class="field grid">
+                            <label htmlFor="hn" class="col-2 mb-1 md:col-1 md:mb-0 input-header">HN</label>
+                            <div class="col-2 md:col-2">
+                                <input pInputText id="hn" type="text" [(ngModel)]="user.hn" [disabled]="hnDisabled" />
+                            </div>
+                            <span style="color: white;font-size: x-large;">*</span>
+
+                            <label htmlFor="firstName" class="col-2 mb-1 md:col-1 md:mb-0 input-header">ชื่อ</label>
+                            <div class="col-3 md:col-3">
+                                <input pInputText id="firstName" type="text" [(ngModel)]="user.firstName" />
+                            </div>
+                            <span style="color: red;font-size: x-large;">*</span>
+
+                            <label htmlFor="lastName" class="col-2 mb-1 md:col-1 md:mb-0 input-header">นามสกุล</label>
+                            <div class="col-3 md:col-3">
+                                <input pInputText id="lastName" type="text" [(ngModel)]="user.lastName" />
+                            </div>
+                            <span style="color: red;font-size: x-large;">*</span>
+                        </div>
+                        <div class="field grid">
+                            <label htmlFor="phoneNo"
+                                class="col-2 mb-1 md:col-1 md:mb-0 input-header">เบอร์ติดต่อ</label>
+                            <div class="col-2 md:col-2">
+                                <p-inputMask id="phoneNo" mask="9999999999" [(ngModel)]="user.phoneNo"></p-inputMask>
+                            </div>
+                            <span style="color: red;font-size: x-large;">*</span>
+
+                            <label htmlFor="email" class="col-2 mb-1 md:col-1 md:mb-0 input-header">Email</label>
+                            <div class="col-3 md:col-3">
+                                <input pInputText id="email" type="text" [(ngModel)]="user.email" />
+                            </div>
+                            <span style="color: red;font-size: x-large;">*</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <div class="layout-footer">
+                        <button pButton pRipple type="button" icon="pi pi-undo" label="Cancel"
+                            class="p-button-outlined p-button-secondary" (click)="cancel()"></button>
+                        <button pButton pRipple type="button" icon="pi pi-save" label="Add"
+                            class="p-button-outlined p-button-info" (click)="add()"></button>
+                        <button pButton pRipple type="button" icon="pi pi-save" label="Save"
+                            class="p-button-outlined p-button-info" (click)="save()"></button>
+                        <button pButton pRipple type="button" icon="pi pi-times-circle" label="Delete"
+                            class="p-button-outlined p-button-danger" (click)="delete()"></button>
+                    </div>
+                    <hr class="line-green">
+                </ng-template>
+            </p-dialog>
+
+            <p-dialog [(visible)]="deleteDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span *ngIf="user">Are you sure you want to delete HN <b>{{user.hn}}</b>?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                        (click)="deleteDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                        (click)="confirmDelete()"></button>
+                </ng-template>
+            </p-dialog>
+        </div>
+    </div>
+</div>
